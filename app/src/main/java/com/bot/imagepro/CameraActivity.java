@@ -53,19 +53,23 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("Test1"," 111111");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Log.e("Test2","22222");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        Log.e("Test3","333333333");
         int MY_PERMISSIONS_REQUEST_CAMERA =0;
 
         if (ContextCompat.checkSelfPermission( CameraActivity. this, Manifest.permission.CAMERA) ==PackageManager.PERMISSION_DENIED) {
 
-            ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+            ActivityCompat.requestPermissions(CameraActivity.this, new String[] {Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
 
         }
 
 
         setContentView(R.layout.activity_camera);
+        Log.e("Test4","444444444444");
         mOpenCvCameraView = (CameraBridgeViewBase)findViewById(R.id.frame_Surface);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
