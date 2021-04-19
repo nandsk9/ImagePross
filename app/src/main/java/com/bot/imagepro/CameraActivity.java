@@ -84,7 +84,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }else {
             Log.d(TAG,"Opencv is not loaded try again");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0,this,mLoaderCallback);
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION,this,mLoaderCallback);
         }
     }
     @Override
