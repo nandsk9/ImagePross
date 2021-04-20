@@ -22,6 +22,12 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class CameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -30,6 +36,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private Mat mGrey;
     private CameraBridgeViewBase mOpenCvCameraView;
 
+    private CascadeClassifier cascadeClassifier;
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -73,6 +80,26 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mOpenCvCameraView = (CameraBridgeViewBase)findViewById(R.id.frame_Surface);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
+
+        try {
+            InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt);
+            File cascadeDir = getDir("cascade",MODE_PRIVATE);
+            File mCascadeFile = new File(cascadeDir,"haarcascade_frontalface_alt.xml");
+            FileOutputStream os = new FileOutputStream(mCascadeFile);
+            byte[] buffer = new byte[4096];
+            int byteRead;
+            while ((byteRead = is.read(buffer))!=-1)
+            {
+                os.write(buffer,0,byteRead);
+            }
+                is.close();
+                os.close();
+
+                cascadeClassifier = new CascadeClassifier(mCascadeFile.getAbsolutePath());
+
+        }catch (IOException e){
+            Log.i(TAG,"Cascade file not Found ");
+        }
 
     }
 
@@ -121,3 +148,4 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
 }
 
+//https://www.youtube.com/watch?v=HeLi7UmQssI&list=PL0aoTDj9Nwgh0hTC3QBHwKtJuxl1veGyG&index=8
