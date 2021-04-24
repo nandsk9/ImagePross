@@ -169,7 +169,8 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         }
 
         Core.flip(mRgba.t(),mRgba,0);
-        return mRgba
+        return mRgba;
+
 
 
     }
