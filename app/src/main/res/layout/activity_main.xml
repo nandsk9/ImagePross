@@ -8,9 +8,9 @@
     android:gravity="center">
 
    <Button
-       android:layout_width="200dp"
-       android:layout_height="50dp"
        android:id="@+id/camera_btn"
-       android:text="Scan Face"/>
+       android:layout_width="203dp"
+       android:layout_height="78dp"
+       android:text="Scan Face" />
 
 </LinearLayout>

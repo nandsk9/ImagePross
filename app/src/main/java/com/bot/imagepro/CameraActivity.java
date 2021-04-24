@@ -21,6 +21,10 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
@@ -141,8 +145,33 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mRgba=inputFrame.rgba();
         mGrey =inputFrame.gray();
 
-        //mRgba=CascadeRec(mRgba);
+        mRgba=CascadeRec(mRgba);
         return mRgba;
+    }
+    private Mat CascadeRec(Mat mRgba){
+        Core.flip(mRgba.t(),mRgba,1);
+        Mat mRbg=new Mat();
+        Imgproc.cvtColor(mRgba,mRbg,Imgproc.COLOR_RGBA2RGB);
+
+        int height=mRbg.height();
+        int absoluteFaceSize=(int) (height*0.1);
+
+        MatOfRect faces=new MatOfRect();
+        if(cascadeClassifier !=null){
+
+            cascadeClassifier.detectMultiScale(mRbg,faces,1.1,2,2,new Size(absoluteFaceSize,absoluteFaceSize),new Size());
+        }
+        Rect[] facesArray=faces.toArray();
+        for(int i=0;i<facesArray.length;i++){
+            Imgproc.rectangle(mRgba,facesArray[i].tl(),facesArray[i].br(),new Scalar(0,255,0,255),2);
+
+
+        }
+
+        Core.flip(mRgba.t(),mRgba,0);
+        return mRgba
+
+
     }
 
 
