@@ -142,23 +142,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
         mGrey = new Mat(height, width, CvType.CV_8UC1);
-        //Loading age module
-        String proto = getPath("deploy_age.prototxt");
-        String weights = getPath("age_net.caffemodel");
-        Log.i(TAG, "onCameraViewStarted| ageProto : " + proto + ",ageWeights : " + weights);
-        mAgeNet = Dnn.readNetFromCaffe(proto, weights);
 
-        //Loading gender module
-        proto = getPath("deploy_gender.prototxt");
-        weights = getPath("gender_net.caffemodel");
-        Log.i(TAG, "onCameraViewStarted| genderProto : " + proto + ",genderWeights : " + weights);
-        mGenderNet = Dnn.readNetFromCaffe(proto, weights);
-
-        if (mAgeNet.empty()) {
-            Log.i(TAG, "Network loading failed");
-        } else {
-            Log.i(TAG, "Network loading success");
-        }
 
     }
 
@@ -170,16 +154,8 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mRgba = inputFrame.rgba();
         mGrey = inputFrame.gray();
 
-        Log.i(TAG, "mTempFrontalFacesArray : " + Arrays.toString(mTempFrontalFacesArray));
-        if (mTempFrontalFacesArray != null) {
-            String age;
-            Log.i(TAG, "mTempFrontalFacesArray.length : " + mTempFrontalFacesArray.length);
-            for (int i = 0; i < mTempFrontalFacesArray.length; i++) {
-                Log.i(TAG, "Age : " + analyseAge(mRgba, mTempFrontalFacesArray[i]));
-                Log.i(TAG, "Gender : " + analyseGender(mRgba, mTempFrontalFacesArray[i]));
-            }
-            mTempFrontalFacesArray = null;
-        }
+
+
 
             mRgba = CascadeRec(mRgba);
             return mRgba;
@@ -214,82 +190,12 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
 
 
-    private String analyseAge(Mat mRgba, Rect face) {
-        try {
-            Log.e("analyseAgefunction", " analyseAgefunction open aayi");
-            Mat capturedFace = new Mat(mRgba, face);
-            //Resizing pictures to resolution of Caffe model
-            Imgproc.resize(capturedFace, capturedFace, new Size(227, 227));
-            //Converting RGBA to BGR
-            Imgproc.cvtColor(capturedFace, capturedFace, Imgproc.COLOR_RGBA2BGR);
-
-            //Forwarding picture through Dnn
-            Mat inputBlob = Dnn.blobFromImage(capturedFace, 1.0f, new Size(227, 227),
-                    new Scalar(78.4263377603, 87.7689143744, 114.895847746), false, false);
-            mAgeNet.setInput(inputBlob, "data");
-            Mat probs = mAgeNet.forward("prob").reshape(1, 1);
-            Core.MinMaxLocResult mm = Core.minMaxLoc(probs); //Getting largest softmax output
-
-            double result = mm.maxLoc.x; //Result of age recognition prediction
-            Log.i(TAG, "Result is: " + result);
-            return AGES[(int) result];
-        } catch (Exception e) {
-            Log.e(TAG, "Error processing age", e);
-        }
-        return null;
-    }
 
 
-    private String analyseGender(Mat mRgba, Rect face) {
-        try {
-            Log.e("analyseGenderfunction", " analyseGenderfunction open aayi");
-            Mat capturedFace = new Mat(mRgba, face);
-            //Resizing pictures to resolution of Caffe model
-            Imgproc.resize(capturedFace, capturedFace, new Size(227, 227));
-            //Converting RGBA to BGR
-            Imgproc.cvtColor(capturedFace, capturedFace, Imgproc.COLOR_RGBA2BGR);
 
-            //Forwarding picture through Dnn
-            Mat inputBlob = Dnn.blobFromImage(capturedFace, 1.0f, new Size(227, 227),
-                    new Scalar(78.4263377603, 87.7689143744, 114.895847746), false, false);
-            mGenderNet.setInput(inputBlob, "data");
-            Mat probs = mGenderNet.forward("prob").reshape(1, 1);
-            Core.MinMaxLocResult mm = Core.minMaxLoc(probs); //Getting largest softmax output
 
-            double result = mm.maxLoc.x; //Result of gender recognition prediction. 1 = FEMALE, 0 = MALE
-            Log.i(TAG, "Result is: " + result);
-            return GENDERS[(int) result];
-        } catch (Exception e) {
-            Log.e(TAG, "Error processing gender", e);
-        }
-        return null;
-    }
 
-    private String getPath(String file) {
-        AssetManager assetManager = getApplicationContext().getAssets();
-        BufferedInputStream inputStream;
 
-        try {
-            //Reading data from app/src/main/assets
-            Log.e("data read", " data read");
-            inputStream = new BufferedInputStream(assetManager.open(file));
-            byte[] data = new byte[inputStream.available()];
-
-            inputStream.read(data);
-            inputStream.close();
-
-            File outputFile = new File(getApplicationContext().getFilesDir(), file);
-            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
-            fileOutputStream.write(data);
-            fileOutputStream.close();
-            return outputFile.getAbsolutePath();
-        } catch (IOException ex) {
-            Log.e(TAG, ex.toString());
-
-        }
-        return "";
-
-    }
 }
 
 
