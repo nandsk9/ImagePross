@@ -1,14 +1,11 @@
 package com.bot.imagepro;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.loader.content.Loader;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -26,17 +23,14 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 public class CameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -94,7 +88,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         try {
             InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt);
             File cascadeDir = getDir("cascade", MODE_PRIVATE);
-            File mCascadeFile = new File(cascadeDir, "haarcascade_frontalface_alt.xml");
+            File mCascadeFile = new File(cascadeDir, "raw/haarcascade_frontalface_alt.xml");
             FileOutputStream os = new FileOutputStream(mCascadeFile);
             byte[] buffer = new byte[4096];
             int byteRead;
