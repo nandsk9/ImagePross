@@ -6,17 +6,21 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import org.opencv.objdetect.CascadeClassifier;
+import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.gpu.GpuDelegate;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class age_gender_recognition {
     // define interpreter
-    private Interpreter  interpreter;
+    private Interpreter interpreter;
    // using this we will load model and predict on real time frames
 
     //define input size
@@ -38,10 +42,10 @@ public class age_gender_recognition {
         Interpreter.Options options=new Interpreter.Options();
         gpuDelegate=new GpuDelegate();
         options.addDelegate(gpuDelegate);
-        options.setNumthreads(4);//you can set number of thread according to you phone
+        options.setNumThreads(4);//you can set number of thread according to you phone
         //if you phone have more number of thread - frame rate will be high
         //load model
-        interpreter=new  Interpreter(loadModelFile(assetManager,modelPath),options);
+        interpreter = new  Interpreter(loadModelFile(assetManager,modelPath),options);
         //if this work model is loaded to interpreter
         Log.d("Age_Gender_Recognition","CNN model is loaded");
 
@@ -87,11 +91,11 @@ public class age_gender_recognition {
 
     }
 
-    private mappedByteBuffer loadModelFile(AssetManager assetManager, String modelPath)throws IOException {
+    private MappedByteBuffer loadModelFile(AssetManager assetManager, String modelPath)throws IOException {
         //given you description of file
         AssetFileDescriptor assetFileDescriptor=assetManager.openFd(modelPath);
         //define a input stream to load file
-        FilterInputStream inputStream=new FilterInputStream(assetFileDescriptor.getFileDescriptor());
+        FileInputStream inputStream=new FileInputStream(assetFileDescriptor.getFileDescriptor());
         FileChannel fileChannel=inputStream.getChannel();
         long startOffset=assetFileDescriptor.getStartOffset();
         long declaredLength=assetFileDescriptor.getDeclaredLength();

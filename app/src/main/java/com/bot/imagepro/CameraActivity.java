@@ -1,8 +1,5 @@
 package com.bot.imagepro;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +9,9 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -24,7 +24,6 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.dnn.Net;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
@@ -40,11 +39,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private Mat mGrey;
     private CameraBridgeViewBase mOpenCvCameraView;
     private age_gender_recognition age_gender_recognition;
-    private Net mAgeNet;
-    private static final String[] AGES = new String[]{"0-2", "4-6", "8-13", "15-20", "25-32", "38-43", "48-53", "60+"};
-    private Net mGenderNet;
-    private static final String[] GENDERS = new String[]{"male", "female"};
-    private Rect[] mTempFrontalFacesArray;
+
 
     private CascadeClassifier cascadeClassifier;
     private final BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -108,14 +103,14 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     try {
         //model input image size (96,96,3)
         int inputSize=96;
-        age_gender_recognition=new age_gender_recognition(getAssets(), CameraActivity. this,"model.tflite",inputSize);
+        age_gender_recognition = new age_gender_recognition(getAssets(), CameraActivity. this,"model.tflite",inputSize);
 
     } catch (IOException e) {
         e.printStackTrace();
     }
     }
 
-    }
+
 
     @Override
     protected void onResume() {
