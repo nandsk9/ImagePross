@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private Mat mRgba;
     private Mat mGrey;
     private CameraBridgeViewBase mOpenCvCameraView;
+    private age_gender_recognition age_gender_recognition;
     private Net mAgeNet;
     private static final String[] AGES = new String[]{"0-2", "4-6", "8-13", "15-20", "25-32", "38-43", "48-53", "60+"};
     private Net mGenderNet;
@@ -85,24 +87,33 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
 
-        try {
-            InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt);
-            File cascadeDir = getDir("cascade", MODE_PRIVATE);
-            File mCascadeFile = new File(cascadeDir, "raw/haarcascade_frontalface_alt.xml");
-            FileOutputStream os = new FileOutputStream(mCascadeFile);
-            byte[] buffer = new byte[4096];
-            int byteRead;
-            while ((byteRead = is.read(buffer)) != -1) {
-                os.write(buffer, 0, byteRead);
-            }
-            is.close();
-            os.close();
+        // try {
+        //   InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt);
+        //  File cascadeDir = getDir("cascade", MODE_PRIVATE);
+        //File mCascadeFile = new File(cascadeDir, "raw/haarcascade_frontalface_alt.xml");
+        //FileOutputStream os = new FileOutputStream(mCascadeFile);
+        //byte[] buffer = new byte[4096];
+        //int byteRead;
+        //while ((byteRead = is.read(buffer)) != -1) {
+        //  os.write(buffer, 0, byteRead);
+        // }
+        //is.close();
+        //os.close();
 
-            cascadeClassifier = new CascadeClassifier(mCascadeFile.getAbsolutePath());
+        //cascadeClassifier = new CascadeClassifier(mCascadeFile.getAbsolutePath());
 
-        } catch (IOException e) {
-            Log.i(TAG, "Cascade file not Found ");
-        }
+        //catch (IOException e) {
+        //Log.i(TAG, "Cascade file not Found ");
+        // }
+    try {
+        //model input image size (96,96,3)
+        int inputSize=96;
+        age_gender_recognition=new age_gender_recognition(getAssets(), CameraActivity. this,"model.tflite",inputSize);
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
 
     }
 
