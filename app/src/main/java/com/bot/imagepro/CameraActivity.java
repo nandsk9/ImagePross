@@ -154,37 +154,39 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mRgba = inputFrame.rgba();
         mGrey = inputFrame.gray();
 
+        mRgba=age_gender_recognition.recognizeImage(mRgba);
 
 
 
-            mRgba = CascadeRec(mRgba);
+
+           // mRgba = CascadeRec(mRgba);
             return mRgba;
         }
 
-        private Mat CascadeRec (Mat mRgba){
-            Core.flip(mRgba.t(), mRgba, 1);
-            Mat mRbg = new Mat();
-            Imgproc.cvtColor(mRgba, mRbg, Imgproc.COLOR_RGBA2RGB);
+        //private Mat CascadeRec (Mat mRgba){
+           // Core.flip(mRgba.t(), mRgba, 1);
+            //Mat mRbg = new Mat();
+           // Imgproc.cvtColor(mRgba, mRbg, Imgproc.COLOR_RGBA2RGB);
 
-            int height = mRbg.height();
-            int absoluteFaceSize = (int) (height * 0.1);
+            //int height = mRbg.height();
+           // int absoluteFaceSize = (int) (height * 0.1);
 
-            MatOfRect faces = new MatOfRect();
-            if (cascadeClassifier != null) {
+           // MatOfRect faces = new MatOfRect();
+           // if (cascadeClassifier != null) {
 
-                cascadeClassifier.detectMultiScale(mRbg, faces, 1.1, 2, 2, new Size(absoluteFaceSize, absoluteFaceSize), new Size());
-            }
-            Rect[] facesArray = faces.toArray();
-            for (int i = 0; i < facesArray.length; i++) {
-                Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 2);
+               // cascadeClassifier.detectMultiScale(mRbg, faces, 1.1, 2, 2, new Size(absoluteFaceSize, absoluteFaceSize), new Size());
+           // }
+           // Rect[] facesArray = faces.toArray();
+           // for (int i = 0; i < facesArray.length; i++) {
+              //  Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 2);
 
 
-            }
+            //}
 
-            Core.flip(mRgba.t(), mRgba, 0);
-            return mRgba;
+           // Core.flip(mRgba.t(), mRgba, 0);
+           // return mRgba;
 
-        }
+        //}
 
 
 
