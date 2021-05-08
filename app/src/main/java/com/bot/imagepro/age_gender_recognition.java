@@ -12,6 +12,7 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -25,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
@@ -172,10 +174,45 @@ public class age_gender_recognition {
             //run Interpreter for prediction
             interpreter.runForMultipleInputsOutputs(input,output_map);
 
+            //read object from output map
+            Object age_o=output_map.get(0);
+            Object gender_o=output_map.get(1);
+            //extract value from object
+            int age_value=(int)(float) Array.get(Array.get(age_o,0),0);
+            //converting age in float to int
+            float gender_value=(float)Array.get(Array.get(gender_o,0),0);
+            //gender value is from 0 to 1
+            //close to 1 is for female
+            //close to 0 is for male
+            //you have set threshold to get better result
+            //if  threshold is too small or too large
+            // result will be bad
+            if (gender_value>0.80){
+                 // put age ,gender in text
+                //Female,49
+                //           input/output              text
+                Imgproc.putText(cropped_rgba,"Female,"+age_value
+                        ,new Point(10,20),1,1.5,new Scalar(255,0,0,255),2);
+                //  starting point                                color             R  G  B  alpha    thickness
+
+            }
+            else {
+                Imgproc.putText(cropped_rgba,"Male,"+age_value
+                        ,new Point(10,20),1,1.5,new Scalar(0,0,255,255),2);
+                //                                                                  blue color
+            }
+              //if you want to see number in
+            Log.d("age_gender_recognition","Out "+age_value+","+gender_value);
+
+
+            //replace  face in original frame(mat_image) with cropped_rgba
+            cropped_rgba.copyTo(new Mat(mat_image,roi));
 
 
 
         }
+
+        //
 
         //before return rotate back it with -90 degree
         Core.flip(mat_image.t(),mat_image,0);
