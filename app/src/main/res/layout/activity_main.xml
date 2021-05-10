@@ -4,13 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
    <Button
        android:id="@+id/camera_btn"
-       android:layout_width="203dp"
-       android:layout_height="78dp"
-       android:text="Scan Face" />
+       android:layout_width="337dp"
+       android:layout_height="75dp"
+       android:backgroundTint="#E91E63"
+       android:gravity="center"
+       android:insetTop="10dp"
+       android:text="Scan Face"
+       android:textSize="14sp" />
+
+   <ImageView
+       android:id="@+id/imageView1"
+       android:layout_width="300dp"
+       android:layout_height="283dp"
+       android:scaleType="centerCrop"
+       app:srcCompat="@drawable/ic_baseline_image_24" />
+
+   <Button
+       android:id="@+id/upload_image_btn"
+       android:layout_width="337dp"
+       android:layout_height="75dp"
+       android:backgroundTint="#FF9800"
+       android:text="UPLOAD IMAGE" />
+
 
 </LinearLayout>
+
