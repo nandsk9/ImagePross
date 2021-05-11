@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
-
    <com.google.android.material.tabs.TabLayout
+       app:tabSelectedTextColor="@color/black"
+       app:tabTextColor="@color/black"
+       app:tabIndicatorColor="@color/black"
        android:id="@+id/tabBar"
        android:layout_width="match_parent"
-       android:layout_height="59dp"
-       app:tabIndicatorColor="#5900F8"
-       app:tabTextColor="#000000">
+       android:layout_height="wrap_content"
+
+    >
 
       <com.google.android.material.tabs.TabItem
           android:id="@+id/tabRealtime"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="REAL TIME" />
+          android:text="REAL TIME"
+          />
 
       <com.google.android.material.tabs.TabItem
           android:id="@+id/tabUpload"
@@ -32,18 +34,15 @@
    </com.google.android.material.tabs.TabLayout>
 
 
-
-
-
-
-
-
-
    <androidx.viewpager.widget.ViewPager
        android:id="@+id/viewPager"
        android:layout_width="wrap_content"
-       android:layout_height="163dp" />
+       android:layout_height="match_parent" />
 
 
-</LinearLayout>
+
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
 

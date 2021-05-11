@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     //Button mUploadBtn;
    // private static final int IMAGE_PICK_CODE=1000;
     //private static final int PERMISSION_CODE=1001;
+
 
 
 
@@ -48,8 +51,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         // setting fragment
+
         TabLayout tabLayout=findViewById(R.id.tabBar);
+       // tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FF0000"));
+       // tabLayout.setSelectedTabIndicatorHeight((int) (5 * getResources().getDisplayMetrics().density));
+        //tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#ffffff"));
         TabItem tabRealtime =findViewById(R.id.tabRealtime);
         TabItem tabUpload = findViewById(R.id.tabUpload);
         ViewPager viewPager=findViewById(R.id.viewPager);
