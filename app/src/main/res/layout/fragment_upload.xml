@@ -10,9 +10,9 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="411dp"
+        android:layout_width="match_parent"
         android:layout_height="340dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/ic_baseline_image_24" />
 
@@ -22,13 +22,14 @@
         android:layout_height="75dp"
         android:layout_gravity="center"
         android:backgroundTint="#FFC107"
+        android:gravity="center"
         android:text="UPLOAD IMAGE" />
 
     <Button
         android:id="@+id/upload_image_btn1"
         android:layout_width="337dp"
         android:layout_height="75dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:backgroundTint="#FF5722"
         android:text="SCAN UPLOADED IMAGE" />
 

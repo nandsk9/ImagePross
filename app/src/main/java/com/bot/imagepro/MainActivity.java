@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager=findViewById(R.id.viewPager);
         PagerAdapter pagerAdapter= new PagerAdapter(getSupportFragmentManager(),
                 tabLayout.getTabCount());
+
         viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
 
         //one last step is to change the tabs view when the tab is selected or clicked
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 //if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
                    // if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
                         //permission not granted ,request it.
-                        String[] permissions ={Manifest.permission.READ_EXTERNAL_STORAGE};
+                        //String[] permissions ={Manifest.permission.READ_EXTERNAL_STORAGE};
                         //show popup for runtime permissions
                        // requestPermissions(permissions,PERMISSION_CODE);
 
