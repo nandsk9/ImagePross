@@ -4,63 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center|top|center_vertical"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
 
-   <TextView
+   <com.google.android.material.tabs.TabLayout
+       android:id="@+id/tabBar"
+       android:layout_width="match_parent"
+       android:layout_height="59dp"
+       app:tabIndicatorColor="#5900F8"
+       app:tabTextColor="#000000">
+
+      <com.google.android.material.tabs.TabItem
+          android:id="@+id/tabRealtime"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="REAL TIME" />
+
+      <com.google.android.material.tabs.TabItem
+          android:id="@+id/tabUpload"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="UPLOAD" />
+
+
+   </com.google.android.material.tabs.TabLayout>
+
+
+
+
+
+
+
+
+
+   <androidx.viewpager.widget.ViewPager
+       android:id="@+id/viewPager"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text=" "
-       android:textAlignment="viewStart"
-       android:textAllCaps="true"
-       android:textColor="#000000"
-       android:textSize="18sp"
-       android:textStyle="bold" />
-
-   <TextView
-       android:layout_width="wrap_content"
-       android:layout_height="68dp"
-       android:text=" "
-       android:textAlignment="viewStart"
-       android:textAllCaps="true"
-       android:textColor="#000000"
-       android:textSize="18sp"
-       android:textStyle="bold" />
-
-   <Button
-       android:id="@+id/camera_btn"
-       android:layout_width="337dp"
-       android:layout_height="75dp"
-       android:backgroundTint="#E91E63"
-       android:fadingEdge="horizontal"
-       android:gravity="center"
-       android:insetTop="10dp"
-       android:text="Scan Face"
-       android:textSize="14sp" />
-
-   <ImageView
-       android:id="@+id/imageView1"
-       android:layout_width="300dp"
-       android:layout_height="283dp"
-       android:scaleType="centerCrop"
-       app:srcCompat="@drawable/ic_baseline_image_24" />
-
-   <Button
-       android:id="@+id/upload_image_btn"
-       android:layout_width="337dp"
-       android:layout_height="75dp"
-       android:backgroundTint="#FFC107"
-       android:text="UPLOAD IMAGE" />
-
-   <Button
-       android:id="@+id/upload_image_btn1"
-       android:layout_width="337dp"
-       android:layout_height="75dp"
-       android:backgroundTint="#FF5722"
-       android:text="SCAN UPLOADED IMAGE" />
-
+       android:layout_height="163dp" />
 
 
 </LinearLayout>
