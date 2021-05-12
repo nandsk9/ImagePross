@@ -61,12 +61,14 @@ public class MainActivity extends AppCompatActivity {
         //tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#ffffff"));
         TabItem tabRealtime =findViewById(R.id.tabRealtime);
         TabItem tabUpload = findViewById(R.id.tabUpload);
+
         ViewPager viewPager=findViewById(R.id.viewPager);
         PagerAdapter pagerAdapter= new PagerAdapter(getSupportFragmentManager(),
                 tabLayout.getTabCount());
 
         viewPager.setAdapter(pagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+       // tabLayout.setupWithViewPager(viewPager);
 
 
         //one last step is to change the tabs view when the tab is selected or clicked
