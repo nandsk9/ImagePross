@@ -68,18 +68,18 @@ public class RealtimeFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_realtime, container, false);
         camera_button = parentView.findViewById(R.id.camera_btn);
         //loading .. dioalog calling
-       // LoadingDialog loadingDialog = new LoadingDialog(getContext());
+        LoadingDialog loadingDialog = new LoadingDialog(getActivity());
         camera_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), CameraActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 //loading ....dialog on scan face button
-               // loadingDialog.startLoadingDialog();
+               loadingDialog.startLoadingDialog();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                       // loadingDialog.dismissDialog();
+                       loadingDialog.dismissDialog();
                     }
                 },2000);
             }

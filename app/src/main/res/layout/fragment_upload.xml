@@ -12,7 +12,7 @@
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="340dp"
-        android:layout_gravity="center"
+        android:layout_gravity="clip_horizontal|center"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/ic_baseline_image_24" />
 

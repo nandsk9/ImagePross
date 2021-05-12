@@ -1,6 +1,7 @@
 package com.bot.imagepro;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -28,7 +29,7 @@ public class UploadFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final int RESULT_OK = 0;
+    
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -38,6 +39,7 @@ public class UploadFragment extends Fragment {
     Button mUploadBtn;
     private static final int IMAGE_PICK_CODE=1000;
     private static final int PERMISSION_CODE=1001;
+   // private int RESULT_OK = 1002;
 
     public UploadFragment() {
         // Required empty public constructor
@@ -78,7 +80,7 @@ public class UploadFragment extends Fragment {
         // Inflate the layout for this fragment
         View parentView = inflater.inflate(R.layout.fragment_upload, container, false);
 
-        mImageView= parentView.findViewById(R.id.imageView1);
+        mImageView = parentView.findViewById(R.id.imageView1);
         mUploadBtn=parentView.findViewById(R.id.upload_image_btn);
         //handle button click
         mUploadBtn.setOnClickListener(new View.OnClickListener() {
@@ -161,9 +163,9 @@ public class UploadFragment extends Fragment {
 
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             //set image to image view
-            mImageView.setImageURI(data.getData());
+            mImageView.setImageURI (data.getData());
 
         }
     }
