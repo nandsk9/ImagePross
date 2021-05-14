@@ -38,7 +38,10 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private Mat mRgba;
     private Mat mGrey;
     private CameraBridgeViewBase mOpenCvCameraView;
+    //call java class
     private age_gender_recognition age_gender_recognition;
+    private age_gender_recognition.facialExpressionRecognition facialExpressionRecognition ;
+
 
 
     private CascadeClassifier cascadeClassifier;
@@ -108,6 +111,19 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     } catch (IOException e) {
         e.printStackTrace();
     }
+
+   //facial emotion calling
+        // this will load cascade and model
+
+    try {
+       //input size of model is 48
+        int inputSize=48;
+        facialExpressionRecognition=new age_gender_recognition.facialExpressionRecognition(getAssets(),CameraActivity.this,"model1.tflite",inputSize);
+
+    }
+    catch (IOException e){
+        e. printStackTrace();
+    }
     }
 
 
@@ -153,8 +169,9 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
         mGrey = inputFrame.gray();
-
+        //   output                     input
         mRgba=age_gender_recognition.recognizeImage(mRgba);
+        mRgba=facialExpressionRecognition.recognizeImage(mRgba);
 
 
 

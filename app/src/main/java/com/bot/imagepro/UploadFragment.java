@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class UploadFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -37,14 +38,15 @@ public class UploadFragment extends Fragment {
 
     ImageView mImageView;
     Button mUploadBtn;
-    private static final int IMAGE_PICK_CODE=1000;
-    private static final int PERMISSION_CODE=1001;
-   // private int RESULT_OK = 1002;
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
+    //private View upload_image_btn1;
+
+    // private int RESULT_OK = 1002;
 
     public UploadFragment() {
         // Required empty public constructor
     }
-
 
 
     /**
@@ -81,27 +83,25 @@ public class UploadFragment extends Fragment {
         View parentView = inflater.inflate(R.layout.fragment_upload, container, false);
 
         mImageView = parentView.findViewById(R.id.imageView1);
-        mUploadBtn=parentView.findViewById(R.id.upload_image_btn);
+        mUploadBtn = parentView.findViewById(R.id.upload_image_btn);
         //handle button click
         mUploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Check run time permission
-                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                    if (getContext().checkCallingOrSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_DENIED){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (getContext().checkCallingOrSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                         //permission not granted ,request it.
-                        String[] permissions ={Manifest.permission.READ_EXTERNAL_STORAGE};
+                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
                         //show popup for runtime permissions
-                        requestPermissions(permissions,PERMISSION_CODE);
+                        requestPermissions(permissions, PERMISSION_CODE);
 
-                    }
-                    else {
+                    } else {
                         //permission already granted
                         pickImageFromGallery();
                     }
 
-                }
-                else {
+                } else {
                     // system os is less then marshmallow
                     pickImageFromGallery();
                 }
@@ -121,18 +121,15 @@ public class UploadFragment extends Fragment {
         });
 
 
-
         return parentView;
     }
 
 
-
-
     private void pickImageFromGallery() {
         //intent to pick image
-        Intent intent=new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        startActivityForResult(intent,IMAGE_PICK_CODE);
+        startActivityForResult(intent, IMAGE_PICK_CODE);
 
 
     }
@@ -141,16 +138,15 @@ public class UploadFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode){
-            case PERMISSION_CODE:{
-                if (grantResults.length>0 && grantResults[0]==
-                        PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case PERMISSION_CODE: {
+                if (grantResults.length > 0 && grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED) {
                     //PERMISSION was granted
                     pickImageFromGallery();
-                }
-                else {
+                } else {
                     //permission denied
-                    Toast.makeText(getContext(),"Permission denied...!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Permission denied...!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -165,8 +161,10 @@ public class UploadFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             //set image to image view
-            mImageView.setImageURI (data.getData());
+            mImageView.setImageURI(data.getData());
 
         }
     }
-}
+
+
+    }

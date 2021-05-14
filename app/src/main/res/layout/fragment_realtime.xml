@@ -3,19 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:orientation="vertical"
     tools:context=".RealtimeFragment">
 
     <ImageView
         android:id="@+id/imageview11"
         android:layout_width="match_parent"
-        android:layout_height="288dp"></ImageView>
+        android:layout_height="210dp"></ImageView>
 
     <Button
         android:layout_below="@id/imageview11"
         android:id="@+id/camera_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#E91E63"
+        android:gravity="center"
+        android:text="Scan Face"
+        android:textSize="14sp">
+    </Button>
+
+    <Button
+
+        android:id="@+id/camera_btn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
         android:backgroundTint="#E91E63"
         android:gravity="center"
         android:text="Scan Face"
