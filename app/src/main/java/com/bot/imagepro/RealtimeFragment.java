@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +30,7 @@ public class RealtimeFragment extends Fragment {
     private String mParam2;
     private Button camera_button;
     private Button camera_button1;
+    ImageView mImageView;
 
 
     public RealtimeFragment() {
@@ -60,14 +62,21 @@ public class RealtimeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
         View parentView = inflater.inflate(R.layout.fragment_realtime, container, false);
         camera_button = parentView.findViewById(R.id.camera_btn);
+        mImageView = parentView.findViewById(R.id.imageView);
        // camera_button1 = parentView.findViewById(R.id.camera_btn1);
 
 
