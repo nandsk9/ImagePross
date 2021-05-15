@@ -2,10 +2,12 @@ package com.bot.imagepro;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -13,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         // setting fragment
 
         TabLayout tabLayout=findViewById(R.id.tabBar);
@@ -89,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
 
 
        // camera_button = findViewById(R.id.camera_btn);
@@ -195,6 +202,64 @@ public class MainActivity extends AppCompatActivity {
 
        // }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id =item.getItemId();
+        if (id==R.id.exit){
+            AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("Do You Want To Exit ? ");
+            builder.setCancelable(true);
+            builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    finish();
+                }
+            });
+
+            builder.setPositiveButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    dialogInterface.cancel();
+                }
+            });
+            AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+        }
+        return  true;
+    }
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Confirm Exit..!!");
+        alertDialogBuilder.setIcon(R.drawable.ic_baseline_exit_to_app_24);
+        alertDialogBuilder.setMessage("Are You Sure you want to exit");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                finish();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Toast.makeText(MainActivity.this,"You clicked on cancel",Toast.LENGTH_LONG).show();
+
+            }
+        });
+        AlertDialog alertDialog=alertDialogBuilder.create();
+        alertDialog.show();
+
+
+    }
+
 }
 
 //https://www.youtube.com/watch?v=3NVsN72gWJQ&list=PL0aoTDj9Nwgh0hTC3QBHwKtJuxl1veGyG&index=2//

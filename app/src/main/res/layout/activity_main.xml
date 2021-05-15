@@ -12,6 +12,7 @@
        android:id="@+id/tabBar"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       android:textStyle="bold"
        app:tabIndicatorColor="@color/purple_700"
        app:tabSelectedTextColor="#24035F"
        app:tabTextColor="#22005F"
@@ -22,13 +23,15 @@
           android:id="@+id/tabRealtime"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="REALTIME" />
+          android:text="REALTIME"
+          android:textStyle="bold"/>
 
       <com.google.android.material.tabs.TabItem
           android:id="@+id/tabUpload"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="UPLOAD" />
+          android:text="UPLOAD"
+          android:textStyle="bold"/>
 
 
    </com.google.android.material.tabs.TabLayout>

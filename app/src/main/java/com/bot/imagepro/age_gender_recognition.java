@@ -172,7 +172,19 @@ public class age_gender_recognition {
                 //now predict the byte buffer as an input and emotion as an output
                 interpreter.run(byteBuffer,emotion);
                 //if emotion is recognize print value of it
-                Log.d("facial_expression","Output:"+ Array.get(Array.get(emotion,0),0));
+
+                //define float value of emotion
+                float emotion_v=(float)Array.get(Array.get(emotion,0),0);
+                Log.d("facial_expression","Output:"+ emotion_v);
+                //create a function that return text emotion
+                String emotion_s=get_emotion_text(emotion_v);
+                //now put text on original frame(mat_image)
+                //           input/output text : Angry (2.934234)
+                Imgproc.putText(mat_image,emotion_s+"("+emotion_v+")",
+                        //starting x coordinate                starting y coordinate
+                        new Point((int)faceArray[i].tl().x-10,(int)faceArray[i].tl().y-20),
+                        1,1.5,new Scalar(0,0,255,150),2);
+
 
 
 
@@ -190,6 +202,38 @@ public class age_gender_recognition {
 
             return mat_image;
 
+        }
+
+        private String get_emotion_text(float emotion_v) {
+            //create an empty string
+            String val="";
+            //use if statement to determine val
+            //you can change starting value and ending value to get better result
+
+            if(emotion_v>=0 & emotion_v<0.5){
+                val="Surprise";
+
+            }
+            else if (emotion_v>0.5 & emotion_v<1.5) {
+                val="Fear";
+            }
+            else if (emotion_v>1.5 & emotion_v<2.5) {
+                val="Angry";
+            }
+            else if (emotion_v>2.5 & emotion_v<3.5) {
+                val="Neutral";
+            }
+            else if (emotion_v>3.5 & emotion_v<4.5) {
+                val="Sad";
+            }
+            else if (emotion_v>4.5 & emotion_v<5.5) {
+                val="Disgust";
+
+            }
+            else {
+                val="Happy";
+            }
+            return val;
         }
 
 
@@ -401,10 +445,16 @@ public class age_gender_recognition {
                 //  starting point                                color             R  G  B  alpha    thickness
 
             }
-            else {
+            else if(gender_value<0.80){
+
                 Imgproc.putText(cropped_rgba,"Male,"+age_value
                         ,new Point(10,20),1,1.5,new Scalar(0,0,255,255),2);
                 //                                                                  blue color
+            }
+            else{
+                Imgproc.putText(cropped_rgba,"Not a child"+age_value
+                        ,new Point(10,20),1,1.5,new Scalar(0,0,255,255),2);
+
             }
               //if you want to see number in
             Log.d("age_gender_recognition","Out "+age_value+","+gender_value);
