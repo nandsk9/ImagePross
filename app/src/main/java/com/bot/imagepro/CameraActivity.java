@@ -2,7 +2,7 @@ package com.bot.imagepro;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
+
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,20 +17,15 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfRect;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
+
 import org.opencv.objdetect.CascadeClassifier;
 
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.io.InputStream;
+
 
 public class CameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -41,6 +36,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     //call java class
     private age_gender_recognition age_gender_recognition;
     private age_gender_recognition.facialExpressionRecognition facialExpressionRecognition ;
+
 
 
 
@@ -107,6 +103,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         //model input image size (96,96,3)
         int inputSize=96;
         age_gender_recognition = new age_gender_recognition(getAssets(), CameraActivity. this,"model.tflite",inputSize);
+
 
     } catch (IOException e) {
         e.printStackTrace();

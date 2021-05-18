@@ -6,7 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.google.flatbuffers.FlexBuffers;
+
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -59,18 +59,18 @@ public class age_gender_recognition {
     public static class facialExpressionRecognition{
         //define interpreter
         //Before this implement tensorflow to build gradle file
-        private Interpreter interpreter;
+        private  Interpreter interpreter;
         //define input size
-        private  int INPUT_SIZE;
+        private int INPUT_SIZE;
         //define height and width
-        private  int height=0;
-        private int width=0;
+        private   int height=0;
+        private  int width=0;
        //now it use to implement gpu in interpreter
         private GpuDelegate gpuDelegate=null;
 
 
         //now define cascadeclassifier for face detection
-        private CascadeClassifier cascadeClassifier;
+        private   CascadeClassifier cascadeClassifier;
         //now call this in cameraActivity
         facialExpressionRecognition(AssetManager assetManager,Context context,String modelPath,int inputSize)throws IOException{
             INPUT_SIZE = inputSize;
@@ -183,7 +183,8 @@ public class age_gender_recognition {
                 Imgproc.putText(mat_image,emotion_s+"("+emotion_v+")",
                         //starting x coordinate                starting y coordinate
                         new Point((int)faceArray[i].tl().x-10,(int)faceArray[i].tl().y-20),
-                        1,1.5,new Scalar(0,0,255,150),2);
+                        1,1.5,new Scalar(255, 0, 0),2);
+                //0,0,255,150
 
 
 
@@ -203,30 +204,97 @@ public class age_gender_recognition {
             return mat_image;
 
         }
+        public  Mat recognizePhoto(Mat mat_image){
 
-        private String get_emotion_text(float emotion_v) {
+            Mat grayscaleImage=new Mat();
+            Imgproc.cvtColor(mat_image,grayscaleImage,Imgproc.COLOR_RGBA2GRAY);
+            //set height and weight
+            height=grayscaleImage.height();
+            width=grayscaleImage.width();
+
+
+            //define minimum height of face in original image
+            //below this size of face in original image will show
+            int absoluteFaceSize=(int)(height*0.1);
+            //now create MatofRect to store face
+            MatOfRect faces=new MatOfRect();
+            //check if cascadeclassifier is loaded or not
+            if(cascadeClassifier !=null){
+                //detect face in frame
+                //                     input                              output
+                cascadeClassifier.detectMultiScale(grayscaleImage,faces,1.1,2,2,
+                        new Size(absoluteFaceSize,absoluteFaceSize),new Size());
+                //minimum size
+            }
+
+            // now convert it to array
+            Rect[] faceArray =faces.toArray();
+            //loop through each face
+            for (int i=0;i<faceArray.length;i++){
+                //if  you want to rectangle around face
+                //
+                // Imgproc.rectangle(mat_image,faceArray[i].tl(),faceArray[i].br(),new Scalar(0,255,0,255),20);
+                //now crop face from original frame and grayscaleImage
+                Rect roi =new Rect((int)faceArray[i].tl().x,(int)faceArray[i].tl().y,
+                        (int)(faceArray[i].br().x)-(int)(faceArray[i].tl().x),
+                        (int)faceArray[i].br().y-(int)(faceArray[i].tl().y));
+                //it is very important to get roi right
+                Mat cropped_rgba=new Mat(mat_image,roi);////rgba cropped face
+                // Mat cropped=new Mat(grayscaleImage,roi);//gray scaled cropped face
+                //now converted into cropped rgba to bit map
+                Bitmap bitmap=null;
+                bitmap=Bitmap.createBitmap(cropped_rgba.cols(),cropped_rgba.rows(),Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(cropped_rgba,bitmap);
+                //before converting resize it to (96,96)
+                Bitmap scaledBitmap=Bitmap.createScaledBitmap(bitmap,48,48,false);
+                ByteBuffer byteBuffer=convertBitmapToByteBuffer(scaledBitmap);
+                //now create an object to hold output
+                float[][] emotion=new float[1][1];
+                //now predict the byte buffer as an input and emotion as an output
+                interpreter.run(byteBuffer,emotion);
+                //if emotion is recognize print value of it
+
+                //define float value of emotion
+                float emotion_v=(float)Array.get(Array.get(emotion,0),0);
+                Log.d("facial_expression","Output:"+ emotion_v);
+                //create a function that return text emotion
+                String emotion_s=get_emotion_text(emotion_v);
+                //now put text on original frame(mat_image)
+                //           input/output text : Angry (2.934234)
+                Imgproc.putText(mat_image,emotion_s,
+                        //starting x coordinate                starting y coordinate
+                        new Point((int)faceArray[i].tl().x-20,(int)faceArray[i].tl().y-70),
+                        4,4.5,new Scalar(255,0,0,255),15);
+                          //                       color        red
+
+        }
+            return mat_image;
+
+        }
+
+        private  String get_emotion_text(float emotion_v) {
             //create an empty string
             String val="";
             //use if statement to determine val
             //you can change starting value and ending value to get better result
 
-            if(emotion_v>=0 & emotion_v<0.5){
+            if(emotion_v>=0 & emotion_v<0.8){
                 val="Surprise";
 
             }
-            else if (emotion_v>0.5 & emotion_v<1.5) {
+            else if (emotion_v>0.8 & emotion_v<1.8) {
                 val="Fear";
             }
-            else if (emotion_v>1.5 & emotion_v<2.5) {
+            else if (emotion_v>1.8 & emotion_v<2.8) {
                 val="Angry";
             }
-            else if (emotion_v>2.5 & emotion_v<3.5) {
+            else if (emotion_v>2.8 & emotion_v<3.8) {
                 val="Neutral";
             }
-            else if (emotion_v>3.5 & emotion_v<4.5) {
+            else if (emotion_v>3.8 & emotion_v<4.8) {
                 val="Sad";
             }
-            else if (emotion_v>4.5 & emotion_v<5.5) {
+            else if (emotion_v>4.8 & emotion_v<5.8) {
                 val="Disgust";
 
             }
@@ -237,7 +305,7 @@ public class age_gender_recognition {
         }
 
 
-        private ByteBuffer convertBitmapToByteBuffer(Bitmap scaledBitmap) {
+        private  ByteBuffer convertBitmapToByteBuffer(Bitmap scaledBitmap) {
             ByteBuffer byteBuffer;
             int size_image=INPUT_SIZE;//48
             //4 is multiplied for float
@@ -473,6 +541,125 @@ public class age_gender_recognition {
         Core.flip(mat_image.t(),mat_image,0);
         return mat_image;
     }
+
+
+    public Mat recognizePhoto1(Mat mat_image){
+
+        Mat grayscaleImage=new Mat();
+        Imgproc.cvtColor(mat_image,grayscaleImage,Imgproc.COLOR_RGBA2GRAY);
+        //now define height and width
+        height=grayscaleImage.height();
+        width=grayscaleImage.width();
+
+        //now define minimum height of face in frame
+        int absoluteFaceSize=(int) (height*0.1);
+        MatOfRect faces=new MatOfRect();//holds all faces in frame
+
+        //check if cascadeclassifier is loaded or not
+        if (cascadeClassifier!=null){
+            //detect face in frame(grayscaleImage)
+            //           input                   output                    change this factors for better face detection
+            cascadeClassifier.detectMultiScale(grayscaleImage,faces,1.1,2,2, new Size(absoluteFaceSize,absoluteFaceSize),new Size());
+            //minimum size of face in frame
+
+        }
+        // now convert faces into array
+        Rect[] faceArray=faces.toArray();
+        //loop through each faces
+        for (int i=0;i<faceArray.length;i++){
+            //if you want to draw rectangle around face
+            //        input/output  starting  point
+            Imgproc.rectangle(mat_image,faceArray[i].tl(),faceArray[i].br(),new Scalar(0,255,0,255),15);
+            //                         end point                  color          R  G  B alpha    thickness
+
+            //now crop the face from frame
+            //starting x coordinates         y coordinates
+            Rect roi =new Rect((int)faceArray[i].tl().x,(int)faceArray[i].tl().y,
+                    (int)(faceArray[i].br().x)-(int)(faceArray[i].tl().x),
+                    (int)faceArray[i].br().y-(int)(faceArray[i].tl().y));
+            //it is very important to get roi right
+            Mat cropped=new Mat(grayscaleImage,roi);//gray scaled cropped face
+            Mat cropped_rgba=new Mat(mat_image,roi);//rgba cropped face
+
+            //convert cropped_rgba to bitmap
+            Bitmap bitmap=null;
+            bitmap=Bitmap.createBitmap(cropped_rgba.cols(),cropped_rgba.rows(),Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(cropped_rgba,bitmap);
+            //before converting resize it to (96,96)
+            Bitmap scaledBitmap=Bitmap.createScaledBitmap(bitmap,96,96,false);
+
+            //convert bitmap to byte buffer
+
+            ByteBuffer byteBuffer=convertBitmapToByteBuffer(scaledBitmap);
+            //now put this byte buffer in object
+            Object[] input=new Object[1];
+            input[0]=byteBuffer;
+            //now create an map for output
+            Map<Integer,Object> output_map=new TreeMap<>();
+            float[][] age=new float[1][1];
+            float[][] gender=new float[1][1];
+            //put this into output_map
+            output_map.put(0,age);
+            //  integer object
+            output_map.put(1,gender);
+            //run Interpreter for prediction
+            interpreter.runForMultipleInputsOutputs(input,output_map);
+
+            //read object from output map
+            Object age_o=output_map.get(0);
+            Object gender_o=output_map.get(1);
+            //extract value from object
+            int age_value=(int)(float) Array.get(Array.get(age_o,0),0);
+            //converting age in float to int
+            float gender_value=(float)Array.get(Array.get(gender_o,0),0);
+            //gender value is from 0 to 1
+            //close to 1 is for female
+            //close to 0 is for male
+            //you have set threshold to get better result
+            //if  threshold is too small or too large
+            // result will be bad
+            if (gender_value>0.80){
+                // put age ,gender in text
+                //Female,49
+                //           input/output              text
+                Imgproc.putText(cropped_rgba,"Female,"+age_value
+                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),12);
+                //  starting point                                color             R  G  B  alpha    thickness
+
+            }
+            else if(gender_value<0.80){
+
+                Imgproc.putText(cropped_rgba,"Male,"+age_value
+                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),12);
+                //                                                                  blue color
+            }
+            else{
+                Imgproc.putText(cropped_rgba,"Not a child"+age_value
+                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),12);
+
+            }
+            //if you want to see number in
+            Log.d("age_gender_recognition","Out "+age_value+","+gender_value);
+
+
+            //replace  face in original frame(mat_image) with cropped_rgba
+            cropped_rgba.copyTo(new Mat(mat_image,roi));
+
+
+
+        }
+
+        //
+
+
+        return mat_image;
+    }
+
+
+
+
+
+
 
     private ByteBuffer convertBitmapToByteBuffer(Bitmap scaledBitmap) {
         ByteBuffer byteBuffer;
