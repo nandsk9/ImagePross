@@ -4,11 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -18,6 +22,7 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -33,9 +38,18 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private Mat mRgba;
     private Mat mGrey;
     private CameraBridgeViewBase mOpenCvCameraView;
+    //call for image view of flip button
+    private ImageView flip_camera;
+    //now we define integer that represent camera
+    //0 - back camera
+    //1 - front camera
+    //initially it will be start with back camera
+    private int mCameraId=0;
+
     //call java class
     private age_gender_recognition age_gender_recognition;
     private age_gender_recognition.facialExpressionRecognition facialExpressionRecognition ;
+
 
 
 
@@ -80,6 +94,14 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.frame_Surface);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
+        flip_camera=findViewById(R.id.flip_camera);
+        flip_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //this function change camera
+                swapCamera();
+            }
+        });
 
         // try {
         //   InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt);
@@ -123,6 +145,18 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     }
     }
 
+    private void swapCamera() {
+        //first we will change mCameraId
+        // if 0 change it to 1
+        //if 1 change it to 0
+        mCameraId=mCameraId^1;//basic not operation
+        //disable current cameraview
+        mOpenCvCameraView.disableView();
+        //set camera index
+        mOpenCvCameraView.setCameraIndex(mCameraId);
+        // enable now
+        mOpenCvCameraView.enableView();
+    }
 
 
     @Override
@@ -166,6 +200,11 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
         mGrey = inputFrame.gray();
+        // when mCameraId is 1 (front) rotate camera frame with 180 degree
+        if(mCameraId==1){
+            Core.flip(mRgba,mRgba,-1);
+            Core.flip(mGrey,mGrey,-1);
+        }
         //   output                     input
         mRgba=age_gender_recognition.recognizeImage(mRgba);
         mRgba=facialExpressionRecognition.recognizeImage(mRgba);
