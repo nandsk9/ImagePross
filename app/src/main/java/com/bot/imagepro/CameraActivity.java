@@ -5,7 +5,9 @@ import android.app.Activity;
 
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -26,10 +28,15 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class CameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
@@ -45,6 +52,8 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     //1 - front camera
     //initially it will be start with back camera
     private int mCameraId=0;
+    private ImageView take_picture_button;
+    private int take_image=0;
 
     //call java class
     private age_gender_recognition age_gender_recognition;
@@ -89,6 +98,42 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         }
 
 
+
+//          this will allow you app to ask your permission before writing
+
+        if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_CAMERA);
+
+        }
+
+
+
+
+
+        if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_CAMERA);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         setContentView(R.layout.activity_camera);
         Log.e("Test4", "444444444444");
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.frame_Surface);
@@ -100,6 +145,20 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
             public void onClick(View view) {
                 //this function change camera
                 swapCamera();
+            }
+        });
+        take_picture_button=findViewById(R.id.take_picture_button);
+        final MediaPlayer mediaPlayer=MediaPlayer.create(this,R.raw.camera_sound);
+        take_picture_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaPlayer.start();
+                if(take_image==0){
+                    take_image=1;
+                }
+                else {
+                    take_image=0;
+                }
             }
         });
 
@@ -209,6 +268,16 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mRgba=age_gender_recognition.recognizeImage(mRgba);
         mRgba=facialExpressionRecognition.recognizeImage(mRgba);
 
+        //now we will create a function that take picture
+        //output is take images
+        //which will change every time we take picture
+        //if input 1
+        //then output is 0
+        //so for next frame input will be 0
+        //it will take only one picture and save it
+        //if you done using this method function will save multiple images
+        take_image=take_picture_functions_rgba(take_image,mRgba);
+
 
 
 
@@ -216,7 +285,40 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
             return mRgba;
         }
 
-        //private Mat CascadeRec (Mat mRgba){
+    private int take_picture_functions_rgba(int take_image, Mat mRgba) {
+       if(take_image==1){
+           //now create a new mat that you  want to save
+           Mat save_mat=new Mat();
+           //rotate image by 90 degrees
+           Core.flip(mRgba.t(),save_mat,1);
+           Imgproc.cvtColor(save_mat,save_mat,Imgproc.COLOR_RGBA2BGRA);
+           //now create a new folder imagepro
+           // we will save all image into that folder
+           File folder=new File(Environment.getExternalStorageDirectory().getPath()+"/ImagePro");
+           //now check if folder exist
+           //if not create a new folder
+           boolean success=true;
+           if(!folder.exists()){
+               success=folder.mkdirs();
+           }
+           //now we have to create unique file name  for that image
+           //we will is data
+           SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+           String currentDateAndTime=sdf.format(new Date());
+           String fileName=Environment.getExternalStorageDirectory().getPath()+"/ImagePro/"+currentDateAndTime+".jpg";
+           // write save_mat
+           Imgcodecs.imwrite(fileName,save_mat);
+           take_image=0;
+
+       }
+
+
+
+
+        return  take_image ;
+    }
+
+    //private Mat CascadeRec (Mat mRgba){
            // Core.flip(mRgba.t(), mRgba, 1);
             //Mat mRbg = new Mat();
            // Imgproc.cvtColor(mRgba, mRbg, Imgproc.COLOR_RGBA2RGB);

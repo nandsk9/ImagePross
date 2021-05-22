@@ -618,26 +618,31 @@ public class age_gender_recognition {
             //you have set threshold to get better result
             //if  threshold is too small or too large
             // result will be bad
-            if (gender_value>0.80){
+            if (gender_value > 0.80){
                 // put age ,gender in text
                 //Female,49
                 //           input/output              text
                 Imgproc.putText(cropped_rgba,"Female,"+age_value
-                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),12);
+                        ,new Point(15,110),2,2.5,new Scalar(255,0,0,255),8);
                 //  starting point                                color             R  G  B  alpha    thickness
 
             }
-            else if(gender_value<0.80){
+            else if (gender_value < 0.80){
 
                 Imgproc.putText(cropped_rgba,"Male,"+age_value
-                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),12);
+                        ,new Point(15,110),2,2.5,new Scalar(0,0,255,255),8);
                 //                                                                  blue color
             }
             else{
-                Imgproc.putText(cropped_rgba,"Not a child"+age_value
-                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),12);
+                Imgproc.putText(cropped_rgba,"Male,"+age_value
+                        ,new Point(15,110),2,2.5,new Scalar(0,0,255,255),8);
 
             }
+
+
+
+
+
             //if you want to see number in
             Log.d("age_gender_recognition","Out "+age_value+","+gender_value);
 
