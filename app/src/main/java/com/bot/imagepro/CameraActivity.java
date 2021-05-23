@@ -3,6 +3,7 @@ package com.bot.imagepro;
 import android.Manifest;
 import android.app.Activity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -54,6 +55,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private int mCameraId=0;
     private ImageView take_picture_button;
     private int take_image=0;
+    private ImageView image_gallery_icon;
 
     //call java class
     private age_gender_recognition age_gender_recognition;
@@ -88,8 +90,10 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         Log.e("Test2", "22222");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+
         Log.e("Test3", "333333333");
         int MY_PERMISSIONS_REQUEST_CAMERA = 0;
+
 
         if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
 
@@ -159,6 +163,18 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
                 else {
                     take_image=0;
                 }
+            }
+        });
+        image_gallery_icon=findViewById(R.id.image_gallery_icon);
+        image_gallery_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // if this button is clicked
+                //navigate to new activity(gallery)
+                startActivity(new Intent(CameraActivity.this,GalleryActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
+
+
             }
         });
 
