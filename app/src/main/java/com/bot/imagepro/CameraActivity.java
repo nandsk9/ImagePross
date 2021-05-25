@@ -143,6 +143,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.frame_Surface);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
+        mOpenCvCameraView.enableFpsMeter();
         flip_camera=findViewById(R.id.flip_camera);
         flip_camera.setOnClickListener(new View.OnClickListener() {
             @Override
