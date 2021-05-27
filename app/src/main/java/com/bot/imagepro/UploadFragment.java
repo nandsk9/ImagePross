@@ -172,15 +172,6 @@ import java.io.IOException;
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_PICK_CODE);
-        // Intent intent = new Intent(Intent.ACTION_PICK);
-        //intent.setType("images/*");
-        //startActivityForResult(intent, IMAGE_PICK_CODE);
-
-        //Intent i=new Intent();
-       // i.setType("images/*");
-        //i.setAction(Intent.ACTION_GET_CONTENT);
-        //startActivityForResult(Intent.createChooser(i,"select Picture"),SELECT_PICTURE);
-
     }
     // handle result of runtime permission
     @Override
@@ -212,8 +203,6 @@ import java.io.IOException;
             if (resultCode == Activity.RESULT_OK) {
 
                 if (requestCode == IMAGE_PICK_CODE) {
-
-
                     //set image to image view
                     //image_v.setImageURI(data.getData());
                     Uri selectedImageUri = data.getData();

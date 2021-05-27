@@ -46,7 +46,7 @@ public class age_gender_recognition {
     private  float IMAGE_STD=255.0f;
     private  float IMAGE_MEAN=0;
     private GpuDelegate gpuDelegate=null;
-    //it is use to setup GPU and thead for Interpreter
+    //it is use to setup GPU and thread for Interpreter
     //define height and width
     private  int height=0;
     private int width=0;
@@ -516,7 +516,7 @@ public class age_gender_recognition {
             else if(gender_value<0.80){
 
                 Imgproc.putText(cropped_rgba,"Male,"+age_value
-                        ,new Point(10,20),1,1.5,new Scalar(0,0,255,255),2);
+                        ,new Point(10,20),1,1.5,new Scalar(0, 0, 200),2);
                 //                                                                  blue color
             }
             else{
@@ -623,19 +623,19 @@ public class age_gender_recognition {
                 //Female,49
                 //           input/output              text
                 Imgproc.putText(cropped_rgba,"Female,"+age_value
-                        ,new Point(15,110),2,2.5,new Scalar(255,0,0,255),8);
+                        ,new Point(15,110),4,4.5,new Scalar(255,0,0,255),15);
                 //  starting point                                color             R  G  B  alpha    thickness
 
             }
             else if (gender_value < 0.80){
 
                 Imgproc.putText(cropped_rgba,"Male,"+age_value
-                        ,new Point(15,110),2,2.5,new Scalar(0,0,255,255),8);
+                        ,new Point(15,110),4,4.5,new Scalar(0,0,255,255),15);
                 //                                                                  blue color
             }
             else{
-                Imgproc.putText(cropped_rgba,"Male,"+age_value
-                        ,new Point(15,110),2,2.5,new Scalar(0,0,255,255),8);
+                Imgproc.putText(cropped_rgba,"not a child,"+age_value
+                        ,new Point(15,110),4,4.5,new Scalar(0,0,255,255),15);
 
             }
 
