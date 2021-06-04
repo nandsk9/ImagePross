@@ -66,6 +66,7 @@ import java.io.IOException;
    // private Intent iData;
     private  age_gender_recognition age_gender_recognition;
     private age_gender_recognition.facialExpressionRecognition facialExpressionRecognition;
+    private  autistic_detection autistic_detection;
     private Bitmap bitmap;
     public UploadFragment() {
         // Required empty public constructor
@@ -131,10 +132,20 @@ import java.io.IOException;
             //input size of model is 48
             int inputSize=48;
             facialExpressionRecognition=new age_gender_recognition.facialExpressionRecognition(getActivity().getAssets(),getActivity(),"model1.tflite",inputSize);
+            //facialExpressionRecognition=new age_gender_recognition.facialExpressionRecognition(getActivity().getAssets(),getActivity(),"model2.tflite",inputSize);
 
         }
         catch (IOException e){
             e. printStackTrace();
+            }
+        try {
+            //model input image size (96,96,3)
+            int inputSize=224;
+            autistic_detection = new  autistic_detection(getActivity().getAssets(),getActivity(),"converted_model.tflite",inputSize);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
@@ -220,6 +231,7 @@ import java.io.IOException;
                         //output                                          input
                         selected_image = facialExpressionRecognition.recognizePhoto(selected_image);
                         selected_image=age_gender_recognition.recognizePhoto1(selected_image);
+                        selected_image=autistic_detection.recognizePhoto2(selected_image);
                         // now convert returned selected_image to bitmap
                         Bitmap bitmap1 = null;
                         bitmap1 = Bitmap.createBitmap(selected_image.cols(), selected_image.rows(), Bitmap.Config.ARGB_8888);

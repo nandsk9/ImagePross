@@ -60,6 +60,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     //call java class
     private age_gender_recognition age_gender_recognition;
     private age_gender_recognition.facialExpressionRecognition facialExpressionRecognition ;
+    private autistic_detection  autistic_detection;
 
 
 
@@ -210,16 +211,49 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
    //facial emotion calling
         // this will load cascade and model
 
-    try {
-       //input size of model is 48
-        int inputSize=48;
-        facialExpressionRecognition=new age_gender_recognition.facialExpressionRecognition(getAssets(),CameraActivity.this,"model1.tflite",inputSize);
+        try {
+            //input size of model is 48
+            int inputSize = 48;
+
+            facialExpressionRecognition = new age_gender_recognition.facialExpressionRecognition(getAssets(), CameraActivity.this, "model1.tflite", inputSize);
+            //facialExpressionRecognition = new age_gender_recognition.facialExpressionRecognition(getAssets(), CameraActivity.this, "converted_model.tflite", inputSize);
+
+
+
+        }
+           catch (IOException e) {
+
+               e.printStackTrace();
+           }
+
+
+
+
+
+        try {
+            //model input image size (96,96,3)
+            int inputSize=224;
+              autistic_detection = new autistic_detection(getAssets(),CameraActivity.this,"converted_model.tflite",inputSize);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
 
     }
-    catch (IOException e){
-        e. printStackTrace();
-    }
-    }
+
+
+
+
+
+
+
 
     private void swapCamera() {
         //first we will change mCameraId
@@ -284,6 +318,9 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         //   output                     input
         mRgba=age_gender_recognition.recognizeImage(mRgba);
         mRgba=facialExpressionRecognition.recognizeImage(mRgba);
+        mRgba=autistic_detection.recognizeImage(mRgba);
+
+
 
         //now we will create a function that take picture
         //output is take images
