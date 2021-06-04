@@ -124,7 +124,7 @@ public  class autistic_detection {
             float detection_v=(float) Array.get(Array.get(detection,0),0);
             Log.d("autistic_detection","Output:"+ detection_v);
             String detection_s=get_detection_text(detection_v);
-            Imgproc.putText(mat_image,detection_s+"("+detection_v+")",
+            Imgproc.putText(mat_image,detection_s,
                     //starting x coordinate                starting y coordinate
                     new Point((int)faceArray[i].tl().x-10,(int)faceArray[i].tl().y-60),
                     1,1.5,new Scalar(255, 0, 0),2);
@@ -182,7 +182,7 @@ public  class autistic_detection {
             float detection_v=(float) Array.get(Array.get(detection,0),0);
             Log.d("autistic_detection","Output:"+ detection_v);
             String detection_s=get_detection_text(detection_v);
-            Imgproc.putText(mat_image,detection_s+"("+detection_v+")",
+            Imgproc.putText(mat_image,detection_s,
                     //starting x coordinate                starting y coordinate
                     new Point((int)faceArray[i].tl().x-10,(int)faceArray[i].tl().y-230),
                     2,2.5,new Scalar(255, 0, 0),15);

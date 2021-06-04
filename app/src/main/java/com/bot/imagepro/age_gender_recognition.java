@@ -356,29 +356,6 @@ public class age_gender_recognition {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // this we have to call in onCreate
     age_gender_recognition(AssetManager assetManager, Context context,String modelPath,int inputSize)throws IOException{
      INPUT_SIZE=inputSize;
